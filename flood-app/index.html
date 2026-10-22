@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Interactive 3D Flood Impact and Inundation Geospatial Assessment System" />
+  <title>Flood impact 3D — Geospatial Intelligence</title>
+  
+  <!-- CesiumJS CSS -->
+  <link rel="stylesheet" href="https://cesium.com/downloads/cesiumjs/releases/1.115/Build/Cesium/Widgets/widgets.css" />
+  <!-- Fixed Palette & Strict Scale Theme -->
+  <link rel="stylesheet" href="./theme.css" />
+</head>
+<body>
+
+  <!-- Slim Top Bar -->
+  <header class="top-bar">
+    <h1 class="app-title">Flood impact 3D</h1>
+    <button id="downloadReportBtn" class="preset-btn" style="background-color: var(--surface-2);" aria-label="Download situation report">
+      Export report
+    </button>
+  </header>
+
+  <!-- 3D Cesium Viewport -->
+  <div id="cesiumContainer" role="region" aria-label="Interactive 3D Flood Map"></div>
+
+  <!-- Left Sidebar (Layers, Exploded Toggle, Opacity) -->
+  <aside class="sidebar stagger-1" aria-label="Layer control panel">
+    
+    <!-- Signature Feature: Exploded Layers Toggle (Hierarchy #2) -->
+    <button id="explodeLayersBtn" class="btn-explode" aria-pressed="false">
+      Explode layers
+    </button>
+
+    <!-- Spread Slider (Controls altitude gap) -->
+    <div class="layer-row">
+      <div class="layer-header">
+        <label for="spreadSlider" class="layer-label">Explosion spread</label>
+      </div>
+      <input type="range" id="spreadSlider" min="0.5" max="2.0" step="0.1" value="1.0" aria-label="Control vertical separation gap between exploded tiers" />
+    </div>
+
+    <!-- Evacuation Vehicle Selector -->
+    <div class="layer-row">
+      <span class="layer-label">Routing mode</span>
+      <div class="vehicle-selector" role="group" aria-label="Select vehicle for evacuation route">
+        <button class="vehicle-btn active" data-vehicle="ambulance">Ambulance</button>
+        <button class="vehicle-btn" data-vehicle="truck">High-water truck</button>
+        <button class="vehicle-btn" data-vehicle="foot">Foot patrol</button>
+      </div>
+      <div id="routeNotice" class="stat-label" style="display:none; color: var(--road-open);"></div>
+    </div>
+
+    <!-- Sun Shadow Toggle -->
+    <div class="layer-row">
+      <div class="layer-header">
+        <label for="shadowToggle" class="layer-label">Terrain & building shadows</label>
+        <input type="checkbox" id="shadowToggle" checked />
+      </div>
+    </div>
+
+    <!-- Layer Toggles with Opacity Sliders -->
+    <div class="layer-row">
+      <div class="layer-header">
+        <label class="layer-label"><input type="checkbox" data-layer-toggle="flood" checked /> Flood inundation</label>
+      </div>
+      <div class="slider-group">
+        <input type="range" data-opacity-slider="flood" min="0" max="1" step="0.05" value="0.85" aria-label="Flood opacity" />
+      </div>
+    </div>
+
+    <div class="layer-row">
+      <div class="layer-header">
+        <label class="layer-label"><input type="checkbox" data-layer-toggle="roads" checked /> Transit network</label>
+      </div>
+      <div class="slider-group">
+        <input type="range" data-opacity-slider="roads" min="0" max="1" step="0.05" value="1.0" aria-label="Roads opacity" />
+      </div>
+    </div>
+
+    <div class="layer-row">
+      <div class="layer-header">
+        <label class="layer-label"><input type="checkbox" data-layer-toggle="buildings" checked /> Critical structures</label>
+      </div>
+      <div class="slider-group">
+        <input type="range" data-opacity-slider="buildings" min="0" max="1" step="0.05" value="0.9" aria-label="Buildings opacity" />
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- Dashboard Numbers Strip (Hierarchy #3) -->
+  <section class="dashboard-strip stagger-2" aria-label="Summary statistics">
+    <div class="stat-card">
+      <div class="stat-number">34.2k</div>
+      <div class="stat-label">Population at risk</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" style="color: var(--road-impassable);">42%</div>
+      <div class="stat-label">Roads impassable</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" style="color: var(--road-open);">8 / 10</div>
+      <div class="stat-label">Active shelters</div>
+    </div>
+  </section>
+
+  <!-- Camera Presets Bar -->
+  <nav class="camera-presets stagger-2" aria-label="Camera presets">
+    <button class="preset-btn" data-preset="top" title="Top View (Key: 1)">Top view [1]</button>
+    <button class="preset-btn" data-preset="tilt" title="3D Tilt View (Key: 2)">3D tilt [2]</button>
+    <button class="preset-btn" data-preset="street" title="Street Level (Key: 3)">Street [3]</button>
+    <button class="preset-btn" data-preset="reset" title="Reset View (Key: 0)">Reset [0]</button>
+  </nav>
+
+  <!-- Bottom Timeline Scrubber -->
+  <footer class="timeline-dock stagger-3" aria-label="Flood time controller">
+    <button id="playPauseBtn" class="timeline-play" aria-label="Play timeline">▶</button>
+    <div class="timeline-track-wrapper" style="flex: 1;">
+      <input type="range" id="floodScrubber" min="0" max="24" step="1" value="0" aria-label="Scrub storm timeline (0 to 24 hours)" />
+    </div>
+    <div id="depthReadout" class="timeline-depth">0.0 m</div>
+  </footer>
+
+  <!-- Bottom-Left Legend -->
+  <div class="legend-dock stagger-3" role="complementary" aria-label="Map legend">
+    <div class="legend-item">
+      <div class="legend-swatch" style="background-color: var(--flood-shallow);"></div>
+      <span>Flood water (0.1–3.8 m)</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-swatch" style="background-color: var(--road-open);"></div>
+      <span>Passable road</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-swatch" style="background-color: var(--road-impassable);"></div>
+      <span>Impassable road</span>
+    </div>
+  </div>
+
+  <!-- Side Detail Panel (Opens on feature click) -->
+  <aside id="detailPanel" class="detail-panel hidden" aria-label="Feature details">
+    <div style="display: flex; justify-content: space-between; align-items: start;">
+      <h2 id="detailTitle" style="font-family: var(--font-heading); font-size: var(--text-20);">Sector Detail</h2>
+      <button id="closeDetailPanel" class="preset-btn" style="padding: 2px 6px;" aria-label="Close panel">✕</button>
+    </div>
+    
+    <div>
+      <div class="stat-label">Inundation depth</div>
+      <div id="detailDepth" style="font-family: var(--font-heading); font-size: var(--text-28); font-weight: 700;">1.8 m</div>
+    </div>
+
+    <div>
+      <div class="stat-label">Severity classification</div>
+      <div id="detailSeverity" style="font-size: var(--text-14); font-weight: 600; color: var(--road-impassable);">High</div>
+    </div>
+
+    <div>
+      <div class="stat-label">Accessibility confidence</div>
+      <div id="detailConfidenceText" style="font-size: var(--text-12); margin-top: var(--sp-4);">87% likely impassable</div>
+      <div class="confidence-bar-bg">
+        <div id="detailConfidenceBar" class="confidence-bar-fill" style="width: 87%;"></div>
+      </div>
+    </div>
+
+    <button id="detailFlyToBtn" class="btn-explode" style="margin-top: var(--sp-8);">
+      Fly to location
+    </button>
+  </aside>
+
+  <!-- Hover Tooltip -->
+  <div id="cesiumTooltip" class="cesium-tooltip"></div>
+
+  <!-- CesiumJS Core Script -->
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.115/Build/Cesium/Cesium.js"></script>
+
+  <!-- Application Bootstrap -->
+  <script type="module">
+    import { GlobeManager } from './globe.js';
+    import { LayerManager } from './layers.js';
+    import { ExplodeManager } from './explode.js';
+    import { TimelineManager } from './timeline.js';
+    import { UIManager } from './ui.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      try {
+        const globe = new GlobeManager('cesiumContainer');
+        const ui = new UIManager(globe);
+        const layers = new LayerManager(globe, ui);
+        const explode = new ExplodeManager(globe, layers);
+        const timeline = new TimelineManager(globe, layers);
+
+        ui.setLayerManager(layers);
+
+        // Bind Exploded Layers Trigger
+        const explodeBtn = document.getElementById('explodeLayersBtn');
+        if (explodeBtn) {
+          explodeBtn.addEventListener('click', () => explode.toggleExplode(explodeBtn));
+        }
+
+        const spreadSlider = document.getElementById('spreadSlider');
+        if (spreadSlider) {
+          spreadSlider.addEventListener('input', (e) => explode.setSpreadScale(e.target.value));
+        }
+
+        // Orchestrated Intro
+        globe.playIntro(() => {
+          console.info('Flood impact 3D: Orchestrated intro sequence complete.');
+        });
+      } catch (err) {
+        console.error('Initialization error:', err);
+        const errEl = document.createElement('div');
+        errEl.className = 'feedback-banner';
+        errEl.innerText = "Couldn't initialize 3D scene. Check that your WebGL context is enabled and geo-assets exist in /public/data.";
+        document.body.prepend(errEl);
+      }
+    });
+  </script>
+</body>
+</html>
