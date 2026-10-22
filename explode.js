@@ -1,4 +1,4 @@
-import * as Cesium from 'cesium';
+const Cesium = window.Cesium || globalThis.Cesium;
 
 export class ExplodeManager {
   constructor(globeManager, layerManager) {

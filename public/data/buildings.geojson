@@ -1,0 +1,51 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "bldg-01",
+        "name": "Municipal Emergency Center",
+        "height": 45,
+        "depth": 0.4,
+        "severity": "Moderate",
+        "confidence": 68
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-95.3758, 29.7624],
+            [-95.3738, 29.7624],
+            [-95.3738, 29.7644],
+            [-95.3758, 29.7644],
+            [-95.3758, 29.7624]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "bldg-02",
+        "name": "Regional Hospital Facility",
+        "height": 65,
+        "depth": 0.2,
+        "severity": "Low",
+        "confidence": 35
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-95.3668, 29.7644],
+            [-95.3648, 29.7644],
+            [-95.3648, 29.7664],
+            [-95.3668, 29.7664],
+            [-95.3668, 29.7644]
+          ]
+        ]
+      }
+    }
+  ]
+}

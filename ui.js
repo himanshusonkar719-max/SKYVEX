@@ -1,4 +1,4 @@
-import * as Cesium from 'cesium';
+const Cesium = window.Cesium || globalThis.Cesium;
 
 export class UIManager {
   constructor(globeManager) {
@@ -139,7 +139,10 @@ export class UIManager {
     const banner = document.createElement('div');
     banner.className = 'feedback-banner';
     banner.innerText = message;
-    document.querySelector('.sidebar').prepend(banner);
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebar) {
+      sidebar.prepend(banner);
+    }
   }
 
   exportSitrep() {

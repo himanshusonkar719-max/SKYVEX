@@ -1,0 +1,43 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "rd-01",
+        "name": "Main Transit Arterial",
+        "status": "Passable",
+        "depth": 0.1,
+        "severity": "Low",
+        "confidence": 12
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-95.3898, 29.7554],
+          [-95.3698, 29.7584],
+          [-95.3498, 29.7594]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "rd-02",
+        "name": "Bayou Corridor Expressway",
+        "status": "Impassable",
+        "depth": 1.8,
+        "severity": "High",
+        "confidence": 87
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-95.3778, 29.7454],
+          [-95.3718, 29.7604],
+          [-95.3648, 29.7784]
+        ]
+      }
+    }
+  ]
+}

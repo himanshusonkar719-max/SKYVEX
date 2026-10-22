@@ -1,96 +1,94 @@
-# SKYVEX // Cosmic Odyssey
+# Flood Impact 3D — Geospatial Intelligence
 
-> **Beyond the Boundaries of Earth.**  
-> A futuristic, cinematic, interactive 3D space exploration web experience built with React, Three.js, Tailwind CSS, and Web Audio API.
-
----
-
-## 🌌 Overview
-
-**SKYVEX** combines scientific telemetry with a sci-fi interface to bring the cosmos to your screen. Explore the Solar System in real-time 3D, inspect deep-space destinations like relativistic black holes and spiral nebulae, follow humanity's landmark space missions, and calculate cosmological lookback time and light redshifts.
+> **Interactive 3D Flood Inundation & Infrastructure Assessment Experience**  
+> Built with CesiumJS, Vite, and strict design systems adhering to **Anatomy** & **UI-UX-Pro-Max** specifications.
 
 ---
 
-## ✨ Features
+## 🌊 Overview
 
-- **Cinematic 3D Hero World:** Interactive Three.js WebGL canvas with procedural banded atmosphere, Rayleigh scattering shader glow, Cassini-divided rings, and a 1,800-star particle field.
-- **Interactive 3D Solar System:**
-  - Real-time orbital motion for the Sun and 8 planets (Mercury, Venus, Earth, Mars, Jupiter, Saturn with rings, Uranus, Neptune).
-  - Orbit pause/resume and simulation speed controls (`0.5x`, `1x`, `2x`, `4x`).
-  - Dual perspective: 3D orbital perspective and top-down plan view.
-  - Comprehensive planetary dossier with tabs for **Overview**, **Atmosphere**, and **Missions**.
-  - Planet selector dock with highlighted Earth selection.
-- **Explore the Cosmos:**
-  - **Spiral Galaxies & Nebulae:** Logarithmic spiral galaxy canvas simulation.
-  - **Black Holes & Event Horizons:** Relativistic accretion disk with Doppler beaming, photon sphere ring, and singularity shadow.
-  - **Exoplanets & Strange Worlds:** Transit light-curve simulator with host star flares and atmospheric Rayleigh scattering.
-  - Dedicated astrophysics detail modals with quantitative metrics.
-- **Humanity Beyond Earth (Missions):**
-  - Landmark missions: Apollo 11, Voyager 1, JWST, Artemis, Perseverance, and ISS.
-  - Real-time ticking distance simulation for Voyager 1 into interstellar space.
-  - Filter by `All`, `Active`, `Completed`, or `In Transit`.
-- **Celestial Observatory:**
-  - Deep-sky coordinate tracker (Right Ascension / Declination) for J2000.0 epoch targets.
-  - Interactive cosmological lookback time and redshift ($z$) calculator.
-- **Web Audio Interstellar Synthesizer:**
-  - Binaural ambient cosmic drone generated in real-time via the Web Audio API with telemetry click feedback (muted by default for accessibility).
-- **Accessibility & Performance:**
-  - Full `@media (prefers-reduced-motion)` fallback support.
-  - Dynamic GPU visibility observer to conserve power when canvases are out of view.
+A high-performance geospatial decision-support application analyzing urban flooding impacts on municipal infrastructure, arterial transit corridors, and emergency evacuation routes.
 
 ---
 
-## 🛠️ Tech Stack
+## 🎨 Design System & Visual Hierarchy
 
-- **Framework:** React 19 + TypeScript
-- **Bundler:** Vite 8
-- **Styling:** Tailwind CSS v4 + Vanilla CSS Design Tokens
-- **3D Graphics:** Three.js (WebGL) + HTML5 2D Canvas Shaders
-- **Audio Engine:** Web Audio API (zero external audio file dependencies)
-- **Icons:** Lucide React
-- **Typography:** Orbitron (Headings) & Space Grotesk (Body) via Google Fonts
+- **Fixed Palette:**
+  - Background: `#1A1222`
+  - Surface: `#2C1F33`
+  - Surface 2: `#3A2A42`
+  - Accent: `#B9A38B` (Focus ring & active states)
+  - Accent Hover: `#D4C0A6`
+  - Text: `#F2EBE3`
+  - Muted Text: `#9C8D82`
+- **Semantic Data Colors:**
+  - Flood Inundation: `#4FA3D1` → `#1E5F8C`
+  - Passable Roads: `#5FB878`
+  - Impassable Infrastructure: `#E5534B`
+  - Hazard Severity Tiers: `#7FB77E` / `#E8A03C` / `#D9453B`
+- **Strict Scale Constraints:**
+  - Spacing Scale: `4px, 8px, 12px, 16px, 24px, 32px, 48px` only.
+  - Border Radius: `8px` for controls, `16px` for panels only.
+  - Typography: **Fraunces** for headings and big metrics, **DM Sans** for all UI copy.
+  - Font Sizes: exactly `12, 14, 16, 20, 28, 40 px`.
+  - Sentence case labels with 2px accent focus rings.
 
 ---
 
-## 🚀 Getting Started
+## 📐 Core Features
 
-### Prerequisites
+1. **Signature Exploded Layers (`explode.js`)**
+   - Lifts geo-layers into discrete vertical observation tiers:
+     - Flood baseline: `0 m`
+     - Road network: `+150 m`
+     - Critical infrastructure: `+300 m`
+     - Confidence grid: `+450 m`
+     - Evacuation pathways & shelters: `+600 m`
+   - Smooth 600ms cubic ease transitions.
+   - Dashed vertical connector lines anchored to ground terrain.
+   - Floating tier name badges with spread gap adjustment slider (`0.5x` to `2.0x`).
 
-- Node.js (v18+)
-- npm or yarn
+2. **3D Interactions & Flood Time Scrubber (`timeline.js`)**
+   - 24-hour storm simulation scrubber with depth readout in meters.
+   - Dynamic 3D water extrusion rising on terrain in real time.
+   - Play / pause controls.
 
-### Installation
+3. **Camera Presets & Keyboard Navigation (`globe.js`)**
+   - `[1]` Top View
+   - `[2]` 3D Tilt View
+   - `[3]` Street Level
+   - `[0]` Reset AOI
+   - Dynamic sun-position shadows.
+
+4. **Dynamic Evacuation Routing & Vehicle Selector (`layers.js`)**
+   - Click anywhere on the map to calculate live evacuation route to nearest shelter.
+   - Routing profiles: **Ambulance**, **High-water truck**, **Foot patrol** with 300ms transition.
+
+5. **Hover & Selection Side Detail Panel (`ui.js`)**
+   - Hover highlights feature with **+2m vertical lift**, outline, and tooltip.
+   - Click opens side detail panel (not a modal) with depth, severity, confidence bar, and direct "Fly to" camera zoom.
+   - One-click situation report JSON download.
+
+---
+
+## ⚡ Performance & Accessibility
+
+- `requestRenderMode = true` and `maximumRenderTimeChange = Infinity` for minimal GPU idle overhead.
+- Mobile resolution capping via `Math.min(window.devicePixelRatio, 1.2)`.
+- Full `@media (prefers-reduced-motion)` fallback support.
+- Responsive layout adapting to collapsible bottom-sheet on screens `< 768px`.
+
+---
+
+## 🚀 Quickstart
 
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd SKYVEX
-
 # Install dependencies
 npm install
 
-# Start development server
+# Start local development server
 npm run dev
-```
 
-### Production Build
-
-```bash
+# Production build
 npm run build
-npm run preview
 ```
-
----
-
-## 🛰️ Scientific References & Attribution
-
-- **NASA Jet Propulsion Laboratory (JPL):** Planetary metrics, ephemeris data, and Voyager telemetry.
-- **NASA Exoplanet Archive & ESA/Webb Science Institute:** Exoplanetary parameters and deep field spectrometry.
-- **Event Horizon Telescope (EHT) Collaboration:** Black hole shadow and photon ring metrics.
-- **Deep Space Network (DSN):** Real-time spacecraft communication baselines.
-
----
-
-## 📜 License
-
-MIT License. Designed and developed for the **SKYVEX** Cosmic Odyssey exploration program.

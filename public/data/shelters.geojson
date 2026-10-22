@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "sh-01",
+        "name": "North Central Evacuation Shelter",
+        "capacity": "450 / 800 beds",
+        "status": "Operational",
+        "depth": 0.0,
+        "severity": "Safe",
+        "confidence": 99
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-95.3548, 29.7754]
+      }
+    }
+  ]
+}

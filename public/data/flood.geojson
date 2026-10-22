@@ -1,0 +1,27 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "fl-01",
+        "name": "Simulated Flood Inundation Area",
+        "depth": 2.2,
+        "severity": "Critical",
+        "confidence": 94
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-95.3848, 29.7484],
+            [-95.3548, 29.7484],
+            [-95.3518, 29.7744],
+            [-95.3838, 29.7754],
+            [-95.3848, 29.7484]
+          ]
+        ]
+      }
+    }
+  ]
+}

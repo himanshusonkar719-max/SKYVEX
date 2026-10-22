@@ -1,4 +1,4 @@
-import * as Cesium from 'cesium';
+const Cesium = window.Cesium || globalThis.Cesium;
 
 export class GlobeManager {
   constructor(containerId) {
